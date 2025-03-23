@@ -14,13 +14,18 @@ fi
 path_singularity=$(dirname ${path_metascreener})"/singularity/"
 
 singularity_image="${path_singularity}metascreener.simg"
-if [[ "${software}" == "EO" ]] ||[[ "${software}" == "RC" ]] || [[ "${software}" == "OM" ]] ; then
+if [[ "${software}" == "EO" ]] ||[[ "${software}" == "RC" ]] || [[ "${software}" == "OM" ]] || [[ "${software}" == "GN" ]] ; then
   singularity_image="${path_singularity}metascreener_22.04.simg"
 fi
 
 singularity_prefix=""
+
 if [[ "${software}" == "GN" && "${GPU}" != "N/A" ]]; then
-  singularity_prefix="--nv"
+  singularity_prefix+="--nv "
+fi
+
+if [[ "${software}" == "GN" ]]; then
+  singularity_prefix+="--env OMP_NUM_THREADS=${cores} "
 fi
 
 echo $modules_metascreener >>$name_template_job
